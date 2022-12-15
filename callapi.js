@@ -28,5 +28,33 @@ function clk(){
       })
       .then(res => console.log(res))
       .catch(err => console.log(err));
-
 }
+function getData() {
+  const users = document.getElementById("users");
+
+  axios
+    .get(
+      "https://crudcrud.com/api/e6d6ba7facd44a059965a0f56ee9f533/appointment"
+    )
+    .then((res) => {
+      let data = "";
+      for (let obj of res.data) {
+        data += `<div class="card" style="margin: 0% 30%">
+          <div class="card-body">
+            ${obj.name}
+          </div>
+        </div>`;
+      }
+      users.innerHTML = data;
+    })
+    .catch((err) => {
+      console.log(err);
+      users.innerHTML = `<div class="card" style="margin: 0% 30%">
+  <div class="card-body">
+    ${err.response}
+  </div>
+</div>`;
+    });
+}
+
+getData();
