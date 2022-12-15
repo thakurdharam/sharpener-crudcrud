@@ -27,3 +27,8 @@ h1{
 form{
     padding: 10px;
 }
+#deletedata{
+    background-color: red;
+    color: white;
+    border: none;
+}

@@ -1,47 +1,56 @@
-function clk(){
-    var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
-    var phone = document.getElementById('phone').value;
-    var time = document.getElementById('date').value+" "+document.getElementById('time').value;
+// function printForm(event) {
+//   event.preventDefault();
+//   for (ele of event.target) {
+//     if (ele.type != "submit") {
+//       console.log(ele.id + " is " + ele.value);
+//     }
+//   }
+// }
 
-    console.log(name);
-    console.log(email);
-    console.log(phone);
-    console.log(time);
+// let btn = document.querySelector(".btn");
+// btn.addEventListener("mouseover", () => (btn.style.backgroundColor = "red"));
 
+// document.querySelector(".btn").addEventListener("mouseout", function () {
+//   this.style.backgroundColor = "green";
+// });
+var itemList = document.getElementById("users");
+itemList.addEventListener("click", removeItem);
 
-    if (name.length > 0 && email.length > 0 && phone.length > 0 && time.length>0) {
-        var object = {
-          "name" : name,
-          "email" : email,
-          "phone" : phone, 
-          "time" : time
-        };
-      }
+function saveData(event) {
+  event.preventDefault();
 
-      console.log(object);
+  const appointment = {
+    name: event.target.name.value,
+    email: event.target.email.value,
+    phone: event.target.phone.value,
+    time: event.target.time.value,
+    date: event.target.date.value,
+  };
 
-      axios({
-        method: 'post',
-        url : 'https://crudcrud.com/api/e6d6ba7facd44a059965a0f56ee9f533/appointment',
-        data : object
-      })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+  axios
+    .post(
+      "https://crudcrud.com/api/a65c3d8a11d341d5a89a225e951192bf/appointments",
+      appointment
+    )
+    .then((res) => {
+      console.log(res);
+      alert("User Added successfully.");
+    })
+    .catch((err) => alert(err));
 }
+
 function getData() {
   const users = document.getElementById("users");
 
   axios
-    .get(
-      "https://crudcrud.com/api/e6d6ba7facd44a059965a0f56ee9f533/appointment"
-    )
+    .get("https://jsonplaceholder.typicode.com/users?_limit=5")
     .then((res) => {
       let data = "";
       for (let obj of res.data) {
         data += `<div class="card" style="margin: 0% 30%">
           <div class="card-body">
-            ${obj.name}
+            ${obj.name} <button id="${obj.id}" class="btn edit badge rounded-pill text-bg-success">Edit</button>
+<button id="${obj.id}" class="btn delete badge rounded-pill text-bg-danger">Delete</button>
           </div>
         </div>`;
       }
@@ -51,10 +60,44 @@ function getData() {
       console.log(err);
       users.innerHTML = `<div class="card" style="margin: 0% 30%">
   <div class="card-body">
-    ${err.response}
+    ${err.message} | ${err.code}
   </div>
 </div>`;
     });
 }
-
+//calling existing data if any
 getData();
+
+function removeItem(event) {
+  //delete expense
+  if (event.target.classList.contains("delete")) {
+    if (confirm("Are You Sure?")) {
+      let delete_id = event.target.id;
+      axios
+        .delete("https://jsonplaceholder.typicode.com/users/" + delete_id)
+        .then((res) => {
+          let parentDiv = event.target.parentElement.parentElement;
+          itemList.removeChild(parentDiv);
+          alert("User Deleted Successfully");
+        })
+        .catch((err) => alert(`Error: ${err.message} occurred.`));
+    }
+  }
+  //edit expense
+  if (event.target.classList.contains("edit")) {
+    var li = event.target.parentElement;
+    var delete_value = event.target.parentElement.innerHTML.split("<")[0];
+
+    itemList.removeChild(li);
+    var values = delete_value.split("-");
+    document.getElementById("amount").value = values[0];
+    document.getElementById("desc").value = values[1];
+    document.getElementById("category").value = values[2];
+  }
+}
+
+// const btn1 = document.querySelector(".btn");
+// btn1.addEventListener("mouseout", (event) => {
+//   event.preventDefault();
+//   btn1.style.color = "pink";
+// });
