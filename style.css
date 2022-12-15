@@ -1,0 +1,29 @@
+body{
+    background-image: url("s.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.sz{
+   border: 1px solid orange;
+   border-radius: 2%;
+   background-color: white;
+   width: 50%;
+   margin: 0% 26%;
+}
+header{
+    text-align: center;
+}
+h1{
+    color: orange;
+}
+.bttn{
+    background-color: orange;
+    color: white;
+    border: 1px solid orange;
+    width: 100%;
+    font-weight: 800px;
+    margin-bottom: 20px;
+}
+form{
+    padding: 10px;
+}
