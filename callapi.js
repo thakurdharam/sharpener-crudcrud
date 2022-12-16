@@ -29,7 +29,7 @@ function saveData(event) {
 
   axios
     .post(
-      "https://crudcrud.com/api/a65c3d8a11d341d5a89a225e951192bf/appointments",
+      "https://jsonplaceholder.typicode.com/users",
       appointment
     )
     .then((res) => {
@@ -85,14 +85,24 @@ function removeItem(event) {
   }
   //edit expense
   if (event.target.classList.contains("edit")) {
-    var li = event.target.parentElement;
+    var li = event.target.parentElement.parentElement;
     var delete_value = event.target.parentElement.innerHTML.split("<")[0];
 
     itemList.removeChild(li);
-    var values = delete_value.split("-");
-    document.getElementById("amount").value = values[0];
-    document.getElementById("desc").value = values[1];
-    document.getElementById("category").value = values[2];
+
+    axios
+    .get("https://jsonplaceholder.typicode.com/users?_limit=5")
+    .then((res) => {
+      document.getElementById("name").value = res.data[0].name;
+    document.getElementById("email").value = res.data[1].email;
+    document.getElementById("phone").value = res.data[2].phone;
+    document.getElementById("time").value = res.data[3];
+    document.getElementById("date").value = res.data[4];
+    })
+    .catch((err) => alert(err));
+
+    
+    
   }
 }
 
